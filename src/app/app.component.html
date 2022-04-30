@@ -1,0 +1,139 @@
+<div class="wrapper">
+  <nav id="sidebar" [ngbCollapse]="isMenuCollapsed" *ngIf="currentUser">
+    <div>
+      <div class="sidebar-header">
+        <h3>
+          <a routerLink="/dashboard"
+            >{{ currentUser.firstName }} {{ currentUser.lastName }}</a
+          >
+        </h3>
+      </div>
+
+      <ul class="list-unstyled components">
+        <li>
+          <a href="#homeSubmenu">Mes tableaux</a>
+          <ul>
+            <li *ngFor="let b of userBoard" class="text-uppercase">
+              <a (click)="selectBoard(b)">{{ b.title }} </a>
+            </li>
+          </ul>
+        </li>
+      </ul>
+    </div>
+  </nav>
+  <!-- Page Content  -->
+  <div id="content">
+    <nav
+      class="navbar navbar-expand-lg navbar-light bg-light"
+      *ngIf="!currentUser"
+    >
+      <div class="container-fluid">
+        <a routerLink="/" class="navbar-brand mb-0 h1">kBoard</a>
+        <button
+          class="btn btn-dark d-inline-block d-lg-none ml-auto"
+          type="button"
+          (click)="isCollapsed = !isCollapsed"
+        >
+          <i class="fas fa-align-justify"></i>
+        </button>
+
+        <div
+          class="collapse navbar-collapse"
+          [ngbCollapse]="isCollapsed"
+          id="navbarSupportedContent"
+        >
+          <ul class="nav navbar-nav ml-auto">
+            <li class="nav-item active">
+              <a class="nav-link" href="/home">Home</a>
+            </li>
+            <li class="nav-item">
+              <a class="nav-link" routerLink="/login">Login</a>
+            </li>
+            <li class="nav-item">
+              <a class="nav-link" routerLink="/register">Register</a>
+            </li>
+          </ul>
+        </div>
+      </div>
+    </nav>
+    <!-- Topbar -->
+    <nav
+      class="navbar navbar-expand navbar-light bg-white topbar mb-4 static-top shadow"
+      *ngIf="currentUser"
+    >
+      <button
+        (click)="isMenuCollapsed = !isMenuCollapsed"
+        type="button"
+        id="sidebarCollapse"
+        class="btn btn-link rounded-circle mr-3"
+      >
+        <i class="fas fa-bars"></i>
+        <span></span>
+      </button>
+
+      <div *ngIf="currentBoard" class="mr-2 ml-2">
+        <!--Current Board-->
+        <span>{{ currentBoard.title }}</span>
+      </div>
+      <app-board></app-board>
+
+      <!-- Topbar Navbar -->
+      <ul class="navbar-nav ml-auto">
+        <div class="topbar-divider d-none d-sm-block"></div>
+        <li class="nav-item no-arrow mx-1">
+          <div class="d-inline-block" ngbDropdown #myDrop="ngbDropdown">
+            <button
+              type="button"
+              class="btn btn-outline-primary me-2"
+              id="dropdownManual"
+              ngbDropdownAnchor
+              (focus)="myDrop.open()"
+            >
+              My Tasks
+            </button>
+            <div ngbDropdownMenu aria-labelledby="dropdownManual">
+              <button ngbDropdownItem *ngFor="let c of userCards">
+                {{ c.libelle }} - {{ c.allocatedTime }}
+              </button>
+            </div>
+          </div>
+        </li>
+        <!-- Nav Item - User Information -->
+        <li class="nav-item mr-5 no-arrow">
+          <!-- Dropdown - User Information -->
+          <div ngbDropdown>
+            <a id="dropdownBasic1" ngbDropdownToggle>
+              <span class="mr-2 d-none d-lg-inline text-gray-600 small"
+                ><!--Nom de l'utilisateur-->
+                {{ currentUser.firstName }}</span
+              >
+              <img
+                class="img-profile rounded-circle"
+                src="../assets/profile.png"
+                style="width: 30px; height: 30px"
+              />
+            </a>
+            <div ngbDropdownMenu aria-labelledby="dropdownBasic1">
+              <button ngbDropdownItem routerLink="/user">
+                <i class="fas fa-user fa-sm fa-fw mr-2 text-gray-400"></i>
+                Profile
+              </button>
+              <button ngbDropdownItem (click)="open('focusFirst')">
+                <i
+                  class="fas fa-sign-out-alt fa-sm fa-fw mr-2 text-gray-400"
+                ></i>
+                Logout
+              </button>
+            </div>
+          </div>
+        </li>
+      </ul>
+    </nav>
+    <!-- End of Topbar -->
+    <!--Contenu-->
+    <!--<app-login></app-login>-->
+    <!--<app-register></app-register>-->
+    <app-alert></app-alert>
+    <router-outlet></router-outlet>
+  </div>
+</div>
